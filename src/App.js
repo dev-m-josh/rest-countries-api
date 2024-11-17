@@ -12,6 +12,7 @@ function App() {
   const goToNextStep = () => setCurrentStep((prevStep) => prevStep + 1);
   const goToPreviousStep = () => setCurrentStep((prevStep) => prevStep - 1);
 
+
   return (
     <>
       <header className="header">
@@ -25,7 +26,7 @@ function App() {
         {currentStep === 1 && (
           <Countries
             goToNextStep={goToNextStep}
-            setSelectedCountry={setSelectedCountry} // Pass the setSelectedCountry function
+            setSelectedCountry={setSelectedCountry}
           />
         )}
         {currentStep === 2 && (
