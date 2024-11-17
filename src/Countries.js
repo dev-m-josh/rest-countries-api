@@ -5,15 +5,10 @@ import data from "./data.json";
 import "./App.css";
 
 export default function Countries() {
-  //state to manage filtering
+  // State to manage filtering
   const [filters, setFilters] = useState({
-    region: "", //filter by region
-  });
-
-  const filteredRegion = data.filter((country) => {
-    return filters.region
-      ? country.region.toLowerCase() === filters.region.toLowerCase()
-      : true;
+    region: "", // filter by region
+    search: "", // search query
   });
 
   // Handler function to update the filter state when a user selects a filter option
@@ -22,9 +17,21 @@ export default function Countries() {
     // Update the specific filter
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: value, //update the correct filter
+      [name]: value, // update the correct filter
     }));
   };
+
+  // Filtering countries based on both region and search query
+  const filteredCountries = data.filter((country) => {
+    const matchesRegion = filters.region
+      ? country.region.toLowerCase() === filters.region.toLowerCase()
+      : true;
+    const matchesSearch = country.name
+      .toLowerCase()
+      .includes(filters.search.toLowerCase());
+    
+    return matchesRegion && matchesSearch;
+  });
 
   return (
     <>
@@ -33,13 +40,19 @@ export default function Countries() {
           <p>
             <FontAwesomeIcon icon={faSearch} />
           </p>
-          <input type="search" placeholder="Search for a country..." />
+          <input
+            type="search"
+            placeholder="Search for a country..."
+            name="search"
+            value={filters.search}
+            onChange={handleFilterChange}
+          />
         </div>
-        <select 
-        className="region-select"
-        name="region"
-        value={filters.region}
-        onChange={handleFilterChange}
+        <select
+          className="region-select"
+          name="region"
+          value={filters.region}
+          onChange={handleFilterChange}
         >
           <option value="">Filter by Regions</option>
           <option value="Africa">Africa</option>
@@ -49,28 +62,30 @@ export default function Countries() {
         </select>
       </div>
       <div className="countries">
-        {filteredRegion.map((country) => {
-          return (
-            <div className="country">
+        {filteredCountries.length > 0 ? (
+          filteredCountries.map((country) => (
+            <div className="country" key={country.name}>
               <img src={country.flags.png} alt={country.name} />
               <div className="country-info">
                 <h3>{country.name}</h3>
                 <p>
-                  <span>Population:</span>
+                  <span>Population: </span>
                   {country.population}
                 </p>
                 <p>
-                  <span>Population:</span>
+                  <span>Region: </span>
                   {country.region}
                 </p>
                 <p>
-                  <span>Population:</span>
+                  <span>Capital: </span>
                   {country.capital}
                 </p>
               </div>
             </div>
-          );
-        })}
+          ))
+        ) : (
+          <p>No countries found matching your search criteria.</p>
+        )}
       </div>
     </>
   );
