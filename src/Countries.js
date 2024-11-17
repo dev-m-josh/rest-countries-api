@@ -4,7 +4,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import data from "./data.json";
 import "./App.css";
 
-export default function Countries() {
+export default function Countries({goToNextStep, setSelectedCountry}) {
   // State to manage filtering
   const [filters, setFilters] = useState({
     region: "", // filter by region
@@ -33,6 +33,13 @@ export default function Countries() {
     return matchesRegion && matchesSearch;
   });
 
+  //Handle country click and pass selected country
+  const handleClick = (country) =>{
+    setSelectedCountry(country);
+    goToNextStep();
+  }
+
+
   return (
     <>
       <div className="search">
@@ -54,8 +61,9 @@ export default function Countries() {
           value={filters.region}
           onChange={handleFilterChange}
         >
-          <option value="">Filter by Regions</option>
+          <option value="">Select a Region</option>
           <option value="Africa">Africa</option>
+          <option value="Americas">America</option>
           <option value="Asia">Asia</option>
           <option value="Europe">Europe</option>
           <option value="Oceania">Oceania</option>
@@ -64,7 +72,7 @@ export default function Countries() {
       <div className="countries">
         {filteredCountries.length > 0 ? (
           filteredCountries.map((country) => (
-            <div className="country" key={country.name}>
+            <div className="country" key={country.name}  onClick={() => handleClick(country)}>
               <img src={country.flags.png} alt={country.name} />
               <div className="country-info">
                 <h3>{country.name}</h3>
