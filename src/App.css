@@ -22,11 +22,12 @@
 }
 
 .App{
-  width: 1280px;
+  max-width: 1200px;
   background-color: transparent;
   justify-self: center;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: start;
   align-items: center;
   margin-top: 30px;
 }
@@ -83,4 +84,16 @@
 
 .region-select option{
   outline: none;
+}
+
+.countries{
+  margin-top: 30px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.country{
+  width: 25%;
 }
